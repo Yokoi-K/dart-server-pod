@@ -1,0 +1,12 @@
+class: DeviceInfoModel
+table: device_info
+fields:
+  version: int?
+  brand: String?
+  device: String?
+  hardware: String?
+  manufacturer: String?
+  model: String?
+  supported64BitAbis: List<String?>
+  isPhysicalDevice: bool?
+  createdAt: DateTime?

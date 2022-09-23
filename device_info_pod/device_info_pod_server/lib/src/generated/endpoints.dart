@@ -10,29 +10,57 @@ import 'package:serverpod/serverpod.dart';
 
 import 'protocol.dart';
 
-import '../endpoints/example_endpoint.dart';
+import '../endpoints/device_info_endpoint.dart';
 
 class Endpoints extends EndpointDispatch {
   @override
   void initializeEndpoints(Server server) {
     var endpoints = <String, Endpoint>{
-      'example': ExampleEndpoint()..initialize(server, 'example', null),
+      'deviceInfo': DeviceInfoEndpoint()
+        ..initialize(server, 'deviceInfo', null),
     };
 
-    connectors['example'] = EndpointConnector(
-      name: 'example',
-      endpoint: endpoints['example']!,
+    connectors['deviceInfo'] = EndpointConnector(
+      name: 'deviceInfo',
+      endpoint: endpoints['deviceInfo']!,
       methodConnectors: {
-        'hello': MethodConnector(
-          name: 'hello',
+        'findAll': MethodConnector(
+          name: 'findAll',
+          params: {},
+          call: (Session session, Map<String, dynamic> params) async {
+            return (endpoints['deviceInfo'] as DeviceInfoEndpoint).findAll(
+              session,
+            );
+          },
+        ),
+        'insert': MethodConnector(
+          name: 'insert',
           params: {
-            'name': ParameterDescription(
-                name: 'name', type: String, nullable: false),
+            'model': ParameterDescription(
+                name: 'model', type: DeviceInfoModel, nullable: false),
           },
           call: (Session session, Map<String, dynamic> params) async {
-            return (endpoints['example'] as ExampleEndpoint).hello(
+            return (endpoints['deviceInfo'] as DeviceInfoEndpoint).insert(
               session,
-              params['name'],
+              params['model'],
+            );
+          },
+        ),
+        'deleteAll': MethodConnector(
+          name: 'deleteAll',
+          params: {},
+          call: (Session session, Map<String, dynamic> params) async {
+            return (endpoints['deviceInfo'] as DeviceInfoEndpoint).deleteAll(
+              session,
+            );
+          },
+        ),
+        'count': MethodConnector(
+          name: 'count',
+          params: {},
+          call: (Session session, Map<String, dynamic> params) async {
+            return (endpoints['deviceInfo'] as DeviceInfoEndpoint).count(
+              session,
             );
           },
         ),
